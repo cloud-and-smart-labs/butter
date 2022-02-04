@@ -1,4 +1,3 @@
-from curses import echo
 import click
 from src.inventory.inventory import Inventory
 from src.ssh import SSH
@@ -26,16 +25,40 @@ def execute():
 
 
 def show(output):
-    click.secho(f" {output.get_ssh_id()} ", bold=True, bg='cyan', nl=False)
-    click.secho(f" STATUS {output.get_status()} ", bold=True, bg='green', fg='white', nl=False) if 0 == output.get_status(
-    ) else click.secho(f" STATUS {output.get_status()} ", bold=True, bg='red', fg='white', nl=False)
-    click.secho(f"\t `$ {output.get_command()}` \t",
-                bg='white', fg='black', italic=True)
+    click.secho(
+        f" {output.get_ssh_id()} ",
+        bold=True,
+        bg='cyan',
+        nl=False
+    )
+    click.secho(
+        f" STATUS {output.get_status()} ",
+        bold=True,
+        bg='green',
+        fg='white',
+        nl=False
+    ) if 0 == output.get_status(
+    ) else click.secho(
+        f" STATUS {output.get_status()} ",
+        bold=True,
+        bg='red',
+        fg='white',
+        nl=False
+    )
+    click.secho(
+        f"\t `$ {output.get_command()}` \t",
+        bg='white',
+        fg='black',
+        italic=True
+    )
 
     if 0 == output.get_status():
         click.secho(output.get_output())
     else:
-        click.secho(output.get_error(), fg='red')
+        click.secho(
+            output.get_error(),
+            fg='red'
+        )
 
 
 @click.command('sh')
@@ -131,26 +154,30 @@ def inventory_show(inventory_names: str):
     if inventory_names:
         for inventory_name in inventory_names:
             hosts = Inventory(inventory_name).get_inventory_dict()
-            click.secho(f'  Inventory : {inventory_name}  ',
-                        bold=True,
-                        bg='cyan',
-                        fg='white'
-                        )
-            click.secho('HOSTNAME\tUSERNAME\tPORT',
-                        bold=True,
-                        fg='green'
-                        )
+            click.secho(
+                f'  Inventory : {inventory_name}  ',
+                bold=True,
+                bg='cyan',
+                fg='white'
+            )
+            click.secho(
+                'HOSTNAME\tUSERNAME\tPORT',
+                bold=True,
+                fg='green'
+            )
             if hosts:
                 for host in hosts:
                     click.echo(
-                        f"{host['hostname']}\t{host['username']}\t\t{host['port']}")
+                        f"{host['hostname']}\t{host['username']}\t\t{host['port']}"
+                    )
 
     else:
-        click.secho(f'  Inventories  ',
-                    bold=True,
-                    bg='cyan',
-                    fg='white'
-                    )
+        click.secho(
+            f'  Inventories  ',
+            bold=True,
+            bg='cyan',
+            fg='white'
+        )
         for inventory in Inventory().get_all_inventory():
             click.echo(f'  {inventory}')
 
