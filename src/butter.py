@@ -127,8 +127,8 @@ def inventory_show(inventory_name: str):
     \t $ butter inventory ls my_inventory_name
     '''
     hosts = Inventory(inventory_name).get_inventory_dict()
+    click.secho('HOSTNAME\tUSERNAME\tPORT', bold=True, fg='green')
     if hosts:
-        click.secho('HOSTNAME\tUSERNAME\tPORT', bold=True, fg='green')
         for host in hosts:
             click.echo(
                 f"{host['hostname']}\t{host['username']}\t\t{host['port']}")
