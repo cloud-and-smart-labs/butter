@@ -133,8 +133,8 @@ def inventory_add(inventory_name: str, ssh_ids: tuple, port: int):
 
 @click.command('rm')
 @click.argument('inventory-name')
-@click.argument('ssh-id')
-def inventory_remove(inventory_name: str, ssh_id: str):
+@click.argument('ssh-ids', nargs=-1)
+def inventory_remove(inventory_name: str, ssh_ids: tuple):
     '''
     Remove host from inventory
     argument(s):
@@ -146,9 +146,10 @@ def inventory_remove(inventory_name: str, ssh_id: str):
     \n
     \t $ butter i remove my_inventory_name root@localhost
     '''
-    if '@' in ssh_id:
-        _, ssh_id = ssh_id.split('@')
-    Inventory(inventory_name).remove_host(ssh_id)
+    for ssh_id in ssh_ids:
+        if '@' in ssh_id:
+            _, ssh_id = ssh_id.split('@')
+        Inventory(inventory_name).remove_host(ssh_id)
 
 
 @click.command('ls')

@@ -72,11 +72,11 @@ butter i ls demo
 
 5. Remove host from inventory
 ```bash
-butter i rm demo 172.17.0.3
+butter i rm demo 172.17.0.3 172.17.0.4
 ```
 OR
 ```bash
-butter i rm demo root@172.17.0.3
+butter i rm demo root@172.17.0.3 root@172.17.0.4
 ```
 6. Remove inventory `demo`
 ```bash
