@@ -1,3 +1,4 @@
+from curses import echo
 import click
 from src.inventory.inventory import Inventory
 from src.ssh import SSH
@@ -70,9 +71,9 @@ def inventory_create(name: str):
 
 @click.command('add')
 @click.argument('inventory-name')
-@click.argument('ssh-id')
+@click.argument('ssh-ids', nargs=-1)
 @click.option('-p', '--port', default=22, help='PORT number of SSH server')
-def inventory_add(inventory_name: str, ssh_id: str, port):
+def inventory_add(inventory_name: str, ssh_ids: tuple, port: int):
     '''
     Add new inventory
     \n
@@ -85,12 +86,13 @@ def inventory_add(inventory_name: str, ssh_id: str, port):
     \n
     \t $ butter inventory add my_inventory_name root@localhost
     '''
-    if '@' in ssh_id:
-        username, hostname = ssh_id.split('@')
-        Inventory(inventory_name).add_host(hostname, username, port)
-    else:
-        click.echo(ssh_id, nl=False)
-        click.secho('\tNot A SSH ID', fg='red', bold=True)
+    for ssh_id in ssh_ids:
+        if '@' in ssh_id:
+            username, hostname = ssh_id.split('@')
+            Inventory(inventory_name).add_host(hostname, username, port)
+        else:
+            click.echo(ssh_id, nl=False)
+            click.secho('\tNot A SSH ID', fg='red', bold=True)
 
 
 @click.command('rm')
@@ -114,8 +116,8 @@ def inventory_remove(inventory_name: str, ssh_id: str):
 
 
 @click.command('ls')
-@click.argument('inventory-name')
-def inventory_show(inventory_name: str):
+@click.argument('inventory-names', nargs=-1)
+def inventory_show(inventory_names: str):
     '''
     List of the inventory
     argument(s):
@@ -126,12 +128,31 @@ def inventory_show(inventory_name: str):
     \n
     \t $ butter inventory ls my_inventory_name
     '''
-    hosts = Inventory(inventory_name).get_inventory_dict()
-    click.secho('HOSTNAME\tUSERNAME\tPORT', bold=True, fg='green')
-    if hosts:
-        for host in hosts:
-            click.echo(
-                f"{host['hostname']}\t{host['username']}\t\t{host['port']}")
+    if inventory_names:
+        for inventory_name in inventory_names:
+            hosts = Inventory(inventory_name).get_inventory_dict()
+            click.secho(f'  Inventory : {inventory_name}  ',
+                        bold=True,
+                        bg='cyan',
+                        fg='white'
+                        )
+            click.secho('HOSTNAME\tUSERNAME\tPORT',
+                        bold=True,
+                        fg='green'
+                        )
+            if hosts:
+                for host in hosts:
+                    click.echo(
+                        f"{host['hostname']}\t{host['username']}\t\t{host['port']}")
+
+    else:
+        click.secho(f'  Inventories  ',
+                    bold=True,
+                    bg='cyan',
+                    fg='white'
+                    )
+        for inventory in Inventory().get_all_inventory():
+            click.echo(f'  {inventory}')
 
 
 @click.command('clear')

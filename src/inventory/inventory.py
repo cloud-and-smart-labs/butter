@@ -7,7 +7,7 @@ class Inventory:
     Inventory management with SQLite3
     '''
 
-    def __init__(self, name: str) -> None:
+    def __init__(self, name=None) -> None:
         self.name = name
         self.inventory_db = Database(self.name)
 
@@ -35,6 +35,9 @@ class Inventory:
                 'port': row[2]
             })
         return data
+
+    def get_all_inventory(self) -> list:
+        return self.inventory_db.all_tables()
 
     def get_hostnames(self) -> list:
         return [row[0] for row in self.inventory_db.select()]

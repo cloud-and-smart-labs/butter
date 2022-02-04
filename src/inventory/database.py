@@ -10,7 +10,7 @@ class Database:
     PATH = f'{str(Path.home())}/.butter'
     DB = f'{PATH}/inventory.db'
 
-    def __init__(self, table_name: str) -> None:
+    def __init__(self, table_name=None) -> None:
         if not os.path.exists(self.PATH):
             os.mkdir(self.PATH)
         self.connnection = sqlite3.connect(self.DB)
@@ -72,6 +72,11 @@ class Database:
             return True
         else:
             return False
+
+    def all_tables(self) -> list:
+        sql = "SELECT name FROM sqlite_master WHERE type='table';"
+        self.cursor.execute(sql)
+        return [table_name_tuple[0] for table_name_tuple in self.cursor.fetchall()]
 
     def delete(self, hostname: str):
         sql = f'''
