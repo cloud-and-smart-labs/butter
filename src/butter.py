@@ -1,5 +1,6 @@
 import click
 from src.inventory.inventory import Inventory
+from src.ssh import SSH
 
 
 @click.group()
@@ -14,6 +15,40 @@ def inventory_cmds():
     '''
     Inventory management commands (i: inventory)
     '''
+
+
+@cli.group('x')
+def execute():
+    '''
+    Command execute (x: execute)
+    '''
+
+
+def show(output):
+    click.secho(f" {output.get_ssh_id()} ", bold=True, bg='cyan', nl=False)
+    click.secho(f" STATUS {output.get_status()} ", bold=True, bg='green', fg='white', nl=False) if 0 == output.get_status(
+    ) else click.secho(f" STATUS {output.get_status()} ", bold=True, bg='red', fg='white', nl=False)
+    click.secho(f"\t `$ {output.get_command()}` \t",
+                bg='white', fg='black', italic=True)
+
+    if 0 == output.get_status():
+        click.secho(output.get_output())
+    else:
+        click.secho(output.get_error(), fg='red')
+
+
+@click.command('sh')
+@click.argument('inventory-name')
+@click.argument('cmd')
+def execute_shell(inventory_name: str, cmd: str):
+    '''
+    Execute Shell command
+    '''
+    for host in Inventory(inventory_name).get_inventory_list():
+        ssh_connection = SSH(host[0], host[1], port=int(host[2]))
+        output = ssh_connection.command(cmd)
+        ssh_connection.close()
+        show(output)
 
 
 @click.command('create')
@@ -120,3 +155,4 @@ inventory_cmds.add_command(inventory_add)
 inventory_cmds.add_command(inventory_remove)
 inventory_cmds.add_command(inventory_show)
 inventory_cmds.add_command(inventory_clear)
+execute.add_command(execute_shell)
