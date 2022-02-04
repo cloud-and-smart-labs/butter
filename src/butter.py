@@ -63,11 +63,13 @@ def show(output):
 
 @click.command('sh')
 @click.argument('inventory-name')
-@click.argument('cmd')
+@click.argument('cmd', nargs=-1)
 def execute_shell(inventory_name: str, cmd: str):
     '''
     Execute Shell command
     '''
+    cmd = ' '.join(cmd)
+
     for host in Inventory(inventory_name).get_inventory_list():
         ssh_connection = SSH(host[0], host[1], port=int(host[2]))
         output = ssh_connection.command(cmd)
