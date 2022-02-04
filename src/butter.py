@@ -67,6 +67,17 @@ def show(output):
 def execute_shell(inventory_name: str, cmd: str):
     '''
     Execute Shell command
+    \n
+    argument(s):
+    \n
+    \t 1. Inventory name
+    \t 2. Command
+    \n
+    Example:
+    \n
+    \t `butter x sh my_inventory_name docker image ls`
+    \n
+    \t `bx my_inventory_name `ls -la``
     '''
     cmd = ' '.join(cmd)
 
@@ -89,7 +100,7 @@ def inventory_create(name: str):
     \n
     Example:
     \n
-    \t `$ butter inventory create my_inventory_name`
+    \t `$ butter i create my_inventory_name`
     '''
     Inventory(name).create()
 
@@ -109,7 +120,7 @@ def inventory_add(inventory_name: str, ssh_ids: tuple, port: int):
     \n
     Example:
     \n
-    \t $ butter inventory add my_inventory_name root@localhost
+    \t $ butter i add my_inventory_name root@localhost
     '''
     for ssh_id in ssh_ids:
         if '@' in ssh_id:
@@ -133,7 +144,7 @@ def inventory_remove(inventory_name: str, ssh_id: str):
     \n
     Example:
     \n
-    \t $ butter inventory remove my_inventory_name root@localhost
+    \t $ butter i remove my_inventory_name root@localhost
     '''
     if '@' in ssh_id:
         _, ssh_id = ssh_id.split('@')
@@ -151,7 +162,7 @@ def inventory_show(inventory_names: str):
     \n
     Example:
     \n
-    \t $ butter inventory ls my_inventory_name
+    \t $ butter i ls my_inventory_name
     '''
     if inventory_names:
         for inventory_name in inventory_names:
@@ -195,7 +206,7 @@ def inventory_clear(inventory_name: str):
     \n
     Example:
     \n
-    \t $ butter inventory clear my_inventory_name
+    \t $ butter i clear my_inventory_name
     '''
     Inventory(inventory_name).clear()
 
