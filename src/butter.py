@@ -1,7 +1,6 @@
 import click
 import src.inventory.commands as inventory
-from src.inventory.inventory import Inventory
-from src.ssh import SSH
+import src.ssh.commands as ssh
 
 
 @click.group()
@@ -25,47 +24,10 @@ def execute():
     '''
 
 
-def show(output):
-    click.secho(
-        f" {output.get_ssh_id()} ",
-        bold=True,
-        bg='cyan',
-        nl=False
-    )
-    click.secho(
-        f" STATUS {output.get_status()} ",
-        bold=True,
-        bg='green',
-        fg='white',
-        nl=False
-    ) if 0 == output.get_status(
-    ) else click.secho(
-        f" STATUS {output.get_status()} ",
-        bold=True,
-        bg='red',
-        fg='white',
-        nl=False
-    )
-    click.secho(
-        f"\t `$ {output.get_command()}` \t",
-        bg='white',
-        fg='black',
-        italic=True
-    )
-
-    if 0 == output.get_status():
-        click.secho(output.get_output())
-    else:
-        click.secho(
-            output.get_error(),
-            fg='red'
-        )
-
-
 @click.command('sh')
 @click.argument('inventory-name')
 @click.argument('cmd', nargs=-1)
-def execute_shell(inventory_name: str, cmd: str):
+def execute_shell(inventory_name: str, cmd: tuple):
     '''
     Execute Shell command
     \n
@@ -81,12 +43,7 @@ def execute_shell(inventory_name: str, cmd: str):
     \t `bx my_inventory_name `ls -la``
     '''
     cmd = ' '.join(cmd)
-
-    for host in Inventory(inventory_name).get_inventory_list():
-        ssh_connection = SSH(host[0], host[1], port=int(host[2]))
-        output = ssh_connection.command(cmd)
-        ssh_connection.close()
-        show(output)
+    ssh.shell_command(inventory_name, cmd)
 
 
 @click.command('create')

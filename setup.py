@@ -12,7 +12,9 @@ setup(
         'src/inventory/database',
         'src/inventory/commands',
         'src/inventory/printer',
-        'src/ssh'
+        'src/ssh/ssh',
+        'src/ssh/commands',
+        'src/ssh/printer'
     ],
     install_requires=[
         'Click',
