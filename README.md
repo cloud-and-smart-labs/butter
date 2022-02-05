@@ -53,6 +53,9 @@ butter --help
 ```bash
 butter i create demo
 ```
+```bash
+butter i create demo_1 demo_2 demo_3
+```
 2. Add hosts into the inventory `demo`
 ```bash
 butter i add demo root@172.17.0.3 root@172.17.0.4
@@ -60,6 +63,9 @@ butter i add demo root@172.17.0.3 root@172.17.0.4
 3. Get list of inventories
 ```bash
 butter i ls
+```
+```bash
+butter i ls -a
 ```
 4. Get list of Hosts inside inventory
 ```bash
@@ -69,6 +75,10 @@ butter i ls demo
 <p align="center">
     <img src="docs/ls.png" width="500">
 </p>
+
+```bash
+butter i ls demo_1 demo_2 
+```
 
 5. Remove host from inventory
 ```bash
@@ -82,13 +92,17 @@ butter i rm demo root@172.17.0.3 root@172.17.0.4
 ```bash
 butter i clear demo 
 ```
+Clear all
+```bash
+butter i clear -a
+```
 
 ### Execute
 Execute commands
 ```bash
 butter x sh demo 'docker image ls'
 ```
-OR user short <br>
+OR use shorter one <br>
 `bx` : `b`utter e`x`ecute
 ```bash
 bx demo 'docker image ls'
