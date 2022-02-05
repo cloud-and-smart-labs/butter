@@ -10,7 +10,11 @@ setup(
         'src/butter',
         'src/inventory/inventory',
         'src/inventory/database',
-        'src/ssh'
+        'src/inventory/commands',
+        'src/inventory/printer',
+        'src/ssh/ssh',
+        'src/ssh/commands',
+        'src/ssh/printer'
     ],
     install_requires=[
         'Click',
