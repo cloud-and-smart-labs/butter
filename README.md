@@ -39,6 +39,22 @@ cd butter
 pip install .
 ```
 
+### Enabling Command Auto-completion
+- Linux Systems (Bash Shell)
+```bash
+_BUTTER_COMPLETE=bash_source butter > ~/.butter-complete.bash && echo '. ~/.butter-complete.bash' >> ~/.bashrc && source ~/.bashrc
+```
+- MacOS (zsh Shell) <br>
+The completion system needs to be activated. Add the following to your `~/.zshrc` or `~/.zprofile`
+```bash
+autoload -Uz compinit
+compinit
+```
+Then enabling Auto-completion
+```bash
+echo 'eval "$(_BUTTER_COMPLETE=zsh_source butter)"' >> ~/.zprofile && source ~/.zprofile &&  echo 'eval "$(_BUTTER_COMPLETE=zsh_source butter)"' >> ~/.zprofile && source ~/.zprofile
+```
+
 ## Walk Through
 Butter has two types of commands:
 1. `i`nventory: Creates inventory that contains the SSH details of hosts

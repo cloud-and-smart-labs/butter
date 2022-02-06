@@ -1,4 +1,7 @@
 from click import echo, secho
+import sys
+import time
+import threading
 
 
 def command_output(output):
@@ -46,3 +49,40 @@ def command_output(output):
             output.get_error(),
             fg='red'
         )
+
+
+class Loading:
+    'Console based loader with live status'
+
+    def __init__(self) -> None:
+        self.control = True
+        self.status = ' '
+        self.clear = ' '
+        self.max_r_len = 1
+
+    def set_status(self, status: str) -> None:
+        self.status = status
+        if len(self.status) > self.max_r_len:
+            self.max_r_len = len(self.status)
+            self.clear = ' '*self.max_r_len
+
+    def loading(self) -> None:
+        while self.control:
+            sys.stdout.write(f'\r{self.status} | {self.clear}')
+            time.sleep(0.1)
+            sys.stdout.write(f'\r{self.status} / {self.clear}')
+            time.sleep(0.1)
+            sys.stdout.write(f'\r{self.status} - {self.clear}')
+            time.sleep(0.1)
+            sys.stdout.write(f'\r{self.status} \\ {self.clear}')
+            time.sleep(0.1)
+        sys.stdout.write(f'\r {self.clear} \n')
+
+    def start(self) -> None:
+        self.control = True
+        self.loader_thread = threading.Thread(target=self.loading)
+        self.loader_thread.start()
+
+    def stop(self) -> None:
+        self.control = False
+        self.loader_thread.join()
