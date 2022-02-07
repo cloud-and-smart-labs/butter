@@ -10,17 +10,17 @@ def cli():
     '''
 
 
-@cli.group('i')
+@cli.group('inventory')
 def inventory_cmds():
     '''
-    Inventory management commands (i: inventory)
+    Inventory management commands
     '''
 
 
-@cli.group('x')
+@cli.group('exe')
 def execute():
     '''
-    Command execute (x: execute)
+    Command execute (exe: execute)
     '''
 
 

@@ -30,13 +30,9 @@ ssh-copy-id pi@192.168.0.XXX
 git clone https://github.com/cloud-and-smart-labs/butter.git
 ```
 
-2. Change directory
+2. Install the package
 ```bash
-cd butter
-```
-3. Install the package
-```bash
-pip install .
+pip install butter
 ```
 
 ### Enabling Command Auto-completion
@@ -57,8 +53,8 @@ echo 'eval "$(_BUTTER_COMPLETE=zsh_source butter)"' >> ~/.zprofile && source ~/.
 
 ## Walk Through
 Butter has two types of commands:
-1. `i`nventory: Creates inventory that contains the SSH details of hosts
-2. E`x`ecute: Executes the commands on inventories
+1. `inventory:` Creates inventory that contains the SSH details of hosts
+2. `Exe`cute: Executes the commands on inventories
 
 ```bash
 butter --help
@@ -67,25 +63,25 @@ butter --help
 ### Inventory
 1. Create inventory `demo`
 ```bash
-butter i create demo
+butter inventory create demo
 ```
 ```bash
-butter i create demo_1 demo_2 demo_3
+butter inventory create demo_1 demo_2 demo_3
 ```
 2. Add hosts into the inventory `demo`
 ```bash
-butter i add demo root@172.17.0.3 root@172.17.0.4
+butter inventory add demo root@172.17.0.3 root@172.17.0.4
 ```
 3. Get list of inventories
 ```bash
-butter i ls
+butter inventory ls
 ```
 ```bash
-butter i ls -a
+butter inventory ls -a
 ```
 4. Get list of Hosts inside inventory
 ```bash
-butter i ls demo
+butter inventory ls demo
 ```
 
 <p align="center">
@@ -93,30 +89,30 @@ butter i ls demo
 </p>
 
 ```bash
-butter i ls demo_1 demo_2 
+butter inventory ls demo_1 demo_2 
 ```
 
 5. Remove host from inventory
 ```bash
-butter i rm demo 172.17.0.3 172.17.0.4
+butter inventory rm demo 172.17.0.3 172.17.0.4
 ```
 OR
 ```bash
-butter i rm demo root@172.17.0.3 root@172.17.0.4
+butter inventory rm demo root@172.17.0.3 root@172.17.0.4
 ```
 6. Remove inventory `demo`
 ```bash
-butter i clear demo 
+butter inventory clear demo 
 ```
 Clear all
 ```bash
-butter i clear -a
+butter inventory clear -a
 ```
 
 ### Execute
 Execute commands
 ```bash
-butter x sh demo 'docker image ls'
+butter exe sh demo 'docker image ls'
 ```
 OR use shorter one <br>
 `bx` : `b`utter e`x`ecute
