@@ -4,16 +4,28 @@ import time
 import threading
 
 
-def command_output(output):
-    'Show command output from `Output` object'
-
-    # SSH ID
+def ssh_id(id: str) -> None:
     secho(
-        f" 🧈 {output.get_ssh_id()} ",
+        f" 🧈 {id} ",
         bold=True,
         bg='cyan',
         nl=False
     )
+
+
+def command(cmd: str) -> None:
+    secho(
+        f"\t `$ {cmd}` \t",
+        bg='white',
+        fg='black',
+        italic=True
+    )
+
+
+def command_output(output):
+    'Show command output from `Output` object'
+
+    ssh_id(output.get_ssh_id())
 
     # Command status code
     secho(
@@ -31,13 +43,7 @@ def command_output(output):
         nl=False
     )
 
-    # Shell command
-    secho(
-        f"\t `$ {output.get_command()}` \t",
-        bg='white',
-        fg='black',
-        italic=True
-    )
+    command(output.get_command())
 
     # Command output
     if 0 == output.get_status():
