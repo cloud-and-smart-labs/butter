@@ -6,7 +6,7 @@ import src.ssh.commands as ssh
 @click.group()
 def cli():
     '''
-    Butter : The SSH Client for IoT
+    Butter 🧈 The SSH Client for IoT
     '''
 
 
@@ -27,7 +27,8 @@ def execute():
 @click.command('sh')
 @click.argument('inventory-name')
 @click.argument('cmd', nargs=-1)
-def execute_shell(inventory_name: str, cmd: tuple):
+@click.option('-s', 'stream',  flag_value=True, help='Serially Streaming')
+def execute_shell(inventory_name: str, cmd: tuple, stream):
     '''
     Execute Shell command
     \n
@@ -43,7 +44,10 @@ def execute_shell(inventory_name: str, cmd: tuple):
     \t `bx my_inventory_name `ls -la``
     '''
     cmd = ' '.join(cmd)
-    ssh.shell_command(inventory_name, cmd)
+    if stream:
+        ssh.shell_command_stream(inventory_name, cmd)
+    else:
+        ssh.shell_command(inventory_name, cmd)
 
 
 @click.command('create')
@@ -104,7 +108,7 @@ def inventory_remove(inventory_name: str, ssh_ids: tuple):
 
 @click.command('ls')
 @click.argument('inventory-names', nargs=-1)
-@click.option('-a', 'all',  flag_value=True)
+@click.option('-a', 'all',  flag_value=True, help='Show all including hosts')
 def inventory_show(inventory_names: str, all):
     '''
     List of the inventory
@@ -133,7 +137,7 @@ def inventory_show(inventory_names: str, all):
 
 @click.command('clear')
 @click.argument('inventory-names', nargs=-1)
-@click.option('-a', 'all',  flag_value=True)
+@click.option('-a', 'all',  flag_value=True, help='Delete all')
 def inventory_clear(inventory_names: tuple, all):
     '''
     Delete inventory
