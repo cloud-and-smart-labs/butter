@@ -6,7 +6,7 @@ import src.ssh.commands as ssh
 @click.group()
 def cli():
     '''
-    Butter : The SSH Client for IoT
+    Butter 🧈 The SSH Client for IoT
     '''
 
 
