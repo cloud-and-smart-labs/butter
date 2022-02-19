@@ -9,7 +9,7 @@ def command_output(output):
 
     # SSH ID
     secho(
-        f" {output.get_ssh_id()} ",
+        f" 🧈 {output.get_ssh_id()} ",
         bold=True,
         bg='cyan',
         nl=False
