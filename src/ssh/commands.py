@@ -30,3 +30,19 @@ def shell_command(inventory_name: str, cmd: str) -> None:
         threading.Thread(name=host[0],
                          target=executor,
                          args=(host, output_lock),).start()
+
+
+def shell_command_stream(inventory_name: str, cmd: str) -> None:
+    loader = Loading()
+    for host in Inventory(inventory_name).get_inventory_list():
+        loader.start()
+        loader.set_status(f'Connecting [{host[0]}] ...')
+        ssh_connection = SSH(host[0], host[1], port=int(host[2]))
+
+        loader.set_status(f'Executing [{host[0]}] ...')
+        loader.stop()
+        ssh_id(f'{host[1]}@{host[0]}')
+        command(cmd)
+
+        ssh_connection.command_stream(cmd)
+        ssh_connection.close()

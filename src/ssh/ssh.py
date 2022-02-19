@@ -22,6 +22,14 @@ class SSH:
 
         return self.cmd_output
 
+    def command_stream(self, command) -> None:
+        stdin, stdout, stderr = self.client.exec_command(command)
+        while True:
+            line = stdout.readline()
+            if not line:
+                break
+            print(line, end="")
+
     def close(self) -> None:
         self.client.close()
 
