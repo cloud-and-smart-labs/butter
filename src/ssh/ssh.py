@@ -35,17 +35,33 @@ class SSH:
     '''
 
     def __init__(self, hostname: str, username: str, port=22) -> None:
-        self.client = paramiko.SSHClient()
-        self.client.load_system_host_keys()
-        self.client.connect(hostname=hostname, username=username, port=port)
-        self.ssh_id = f'{username}@{hostname}'
+        self.__ssh_id = f'{username}@{hostname}'
+
+        self._client = paramiko.SSHClient()
+        self._client.load_system_host_keys()
+        try:
+            self._client.connect(
+                hostname=hostname,
+                username=username,
+                port=port
+            )
+        except paramiko.SSHException as e:
+            print(f'Failed while connecting the host: {self.__ssh_id}')
+            print(str(e))
+            exit(1)
 
     def command(self, command) -> Output:
-        _, stdout, stderr = self.client.exec_command(
-            command)
+        'Execute the command on the hosts'
+        try:
+            _, stdout, stderr = self._client.exec_command(
+                command)
+        except paramiko.SSHException as e:
+            print(f'Failed while executing command: {self.__ssh_id}')
+            print(str(e))
+            exit(2)
 
         return Output(
-            self.ssh_id,
+            self.__ssh_id,
             command,
             stdout.channel.recv_exit_status(),
             stdout.read().decode('utf8'),
@@ -53,7 +69,8 @@ class SSH:
         )
 
     def command_stream(self, command) -> None:
-        stdin, stdout, stderr = self.client.exec_command(command)
+        'Execute command and print line wise'
+        _, stdout, _ = self._client.exec_command(command)
         while True:
             line = stdout.readline()
             if not line:
@@ -61,4 +78,5 @@ class SSH:
             print(line, end="")
 
     def close(self) -> None:
-        self.client.close()
+        'Close SSH connection'
+        self._client.close()
