@@ -1,4 +1,4 @@
-# Butter - SSH Client
+# Butter 🧈 - SSH Client
 Lightweight SSH-Client. Build to manage IoT devices (like Raspberry Pis) VMs, Systems. It is agentless and relies on SSH Infrastructure. Fully capable of remotely executing commands on inventories and fetching you the consolidated outputs.
 
 ## Table of Contents
@@ -114,10 +114,17 @@ Execute commands
 ```bash
 butter exe sh demo 'docker image ls'
 ```
+`-s`: Serially Stream
+```bash
+butter exe sh demo 'docker image ls' -s
+```
 OR use shorter one <br>
 `bx` : `b`utter e`x`ecute
 ```bash
 bx demo 'docker image ls'
+```
+```bash
+bx demo 'docker image ls' -s
 ```
 <p align="center">
     <img src="docs/cmd.png" width="500">
