@@ -9,7 +9,6 @@ setup(
     py_modules=[
         'src/butter',
         'src/inventory/inventory',
-        'src/inventory/database',
         'src/inventory/commands',
         'src/inventory/printer',
         'src/ssh/ssh',
