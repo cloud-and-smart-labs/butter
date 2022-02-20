@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(
-    name='butter',
-    version='0.0.1',
+    name='Butter',
+    version='0.0.2a',
     description='SSH Client Utility tool',
     url='https://github.com/cloud-and-smart-labs/butter.git',
     license='Apache License 2.0',

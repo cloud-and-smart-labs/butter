@@ -4,6 +4,7 @@ import src.ssh.commands as ssh
 
 
 @click.group()
+@click.version_option(version='0.0.2a', message='Butter 🧈 Version: 0.0.2a')
 def cli():
     '''
     Butter 🧈 The SSH Client for IoT
