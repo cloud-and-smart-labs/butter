@@ -5,25 +5,32 @@ import threading
 
 
 def shell_command(inventory_name: str, cmd: str) -> None:
+    'Shell command execute concurrently'
+
     def executor(host: list, output_lock: threading.Lock) -> None:
+        'Shell command executor'
         loader = Loading()
         loader.start()
 
-        loader.set_status(f'Connecting [{host[0]}] ...')
-        ssh_connection = SSH(host[0], host[1], port=int(host[2]))
+        try:
+            loader.set_status(f'Connecting [{host[0]}] ...')
+            ssh_connection = SSH(host[0], host[1], port=int(host[2]))
 
-        loader.set_status(f'Executing [{host[0]}] ...')
-        output = ssh_connection.command(cmd)
+            loader.set_status(f'Executing [{host[0]}] ...')
+            output = ssh_connection.command(cmd)
 
-        loader.set_status(f'Done [{host[0]}] .')
-        ssh_connection.close()
+            loader.set_status(f'Done [{host[0]}] .')
+            ssh_connection.close()
+            loader.stop()
 
-        loader.stop()
+            with output_lock:
+                # print(f'lock acquire by: {threading.current_thread()}')
+                command_output(output)
+                # print(f'lock release by: {threading.current_thread()}')
 
-        with output_lock:
-            # print(f'lock acquire by: {threading.current_thread()}')
-            command_output(output)
-            # print(f'lock release by: {threading.current_thread()}')
+        except Exception as e:
+            loader.stop()
+            print(str(e))
 
     output_lock = threading.Lock()
     for host in Inventory(inventory_name).get_inventory_list():
@@ -33,16 +40,21 @@ def shell_command(inventory_name: str, cmd: str) -> None:
 
 
 def shell_command_stream(inventory_name: str, cmd: str) -> None:
+    'Command with -s (stream) switch'
     loader = Loading()
     for host in Inventory(inventory_name).get_inventory_list():
         loader.start()
-        loader.set_status(f'Connecting [{host[0]}] ...')
-        ssh_connection = SSH(host[0], host[1], port=int(host[2]))
+        try:
+            loader.set_status(f'Connecting [{host[0]}] ...')
+            ssh_connection = SSH(host[0], host[1], port=int(host[2]))
 
-        loader.set_status(f'Executing [{host[0]}] ...')
-        loader.stop()
-        ssh_id(f'{host[1]}@{host[0]}')
-        command(cmd)
+            loader.set_status(f'Executing [{host[0]}] ...')
+            loader.stop()
+            ssh_id(f'{host[1]}@{host[0]}')
+            command(cmd)
 
-        ssh_connection.command_stream(cmd)
-        ssh_connection.close()
+            ssh_connection.command_stream(cmd)
+            ssh_connection.close()
+        except Exception as e:
+            loader.stop()
+            print(str(e))
